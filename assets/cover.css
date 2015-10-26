@@ -1,0 +1,9 @@
+html, body {
+    background-image: url('/assets/bac.jpg');
+    background-size: 100%;
+}
+
+a:hover, a:focus {
+    color: #4169C5;
+    text-decoration: underline;
+}
