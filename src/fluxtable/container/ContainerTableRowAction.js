@@ -11,7 +11,7 @@ export default class ContainerTableRowAction extends Component {
     open() {
         var id = this.props.row.Id;
         var port = this.props.row.Ports.filter((element)=>element.PrivatePort == 80);
-        var url = `http://strumyk-next-build:${port[0].PublicPort}/`;
+        var url = `http://strumyk-next-build:${port[0].PublicPort}/next-instance`;
         var win = window.open(url, '_blank');
         win.focus();
     }
@@ -22,13 +22,15 @@ export default class ContainerTableRowAction extends Component {
     }
 
     stopContainer() {
-        var id = this.props.row.Id;
-        containersActionCreator.stopContainer(id);
+        Dialogs.confirm("Are you sure?", "You will stop server!", ()=> {
+            var id = this.props.row.Id;
+            containersActionCreator.stopContainer(id);
+        })
     }
 
     removeContainer(e) {
         e.stopPropagation();
-        Dialogs.confirm("Are you sure?", "You will not be able to recover this container file!", ()=> {
+        Dialogs.confirm("Are you sure?", "You will not be able to recover this server", ()=> {
             var id = this.props.row.Id;
             containersActionCreator.removeContainer(id);
         })

@@ -18,16 +18,12 @@ class ContainerDetails extends Component {
     execute(e) {
         e.preventDefault();
         var command = React.findDOMNode(this.refs.command).value;
-        var split = command.split("\n");
-        for (var i = 0; i < split.length; i++) {
-            var obj = split[i];
-            request.post('http://strumyk-next-build:8010/executor/rest/execute').send({command: obj}).end((err, res) => {
-                Dialogs.showInfo('yo', res.body.response);
-                console.log('res.body: ');
+        request.post('http://strumyk-next-build:8010/executor/shell').send({command: command}).end((err, res) => {
+            Dialogs.showInfo('yo', res.body.response);
+            console.log('res.body: ');
 
-                console.log(res.body);
-            });
-        }
+            console.log(res.body);
+        });
 
 //
     }
@@ -56,8 +52,7 @@ class ContainerDetails extends Component {
         return (
             <form>
                 <div className="form-group">
-                    <textarea type="text" id="command" ref="command" className="form-control" rows="5"
-                        />
+                    <textarea type="text" id="command" ref="command" className="form-control" rows="5"/>
                     <button className="btn btn-primary pull-right" onClick={this.execute.bind(this)}>Execute</button>
                 </div>
                 <div className="form-group">

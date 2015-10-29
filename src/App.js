@@ -17,16 +17,25 @@ var headers = [{name: 'Id', visible: false}, {name: 'Names'}, {
     }
 }, {
     name: 'Status', formater: (value, row, style)=> {
+        var started;
+        if (value.indexOf('Started') == -1) {
+            started = <span className='glyphicon glyphicon-send'
+                            style={{color: 'red', fontSize: '20px'}}></span>
+        } else {
+            started = <span className='glyphicon glyphicon-send'
+                            style={{color: 'green', fontSize: '20px'}}></span>
+        }
+
         if (value.indexOf('Up') == -1) {
             style.color = '#736363';
+
             return <center><span className='glyphicon glyphicon-thumbs-down'
-                                 style={{color:'red',fontSize:'20px'}}></span>
-            </center>;
+                                 style={{color: 'red', fontSize: '20px'}}></span> {started}</center>
         } else {
             return <center><span className='glyphicon glyphicon-thumbs-up'
-                                 style={{color:'green',fontSize:'20px'}}></span>
-            </center>;
+                                 style={{color:'green',fontSize:'20px'}}></span> {started}</center>
         }
+
     }
 }, {name: 'Image', visible: false}];
 
@@ -35,6 +44,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
     }
+
 
     render() {
         return (

@@ -8,6 +8,36 @@ import Dialogs from './../Dialogs';
 import request from 'superagent';
 
 class ContainersActionCreator {
+    checkAppState(element) {
+        var publicPort = '';
+
+        for (var j = 0; j < element.Ports.length; j++) {
+            var port = element.Ports[j];
+            if (port.PrivatePort == '80') {
+                publicPort = port.PublicPort;
+            }
+        }
+
+        if (publicPort) {
+            var script = `
+                new URL('http://strumyk-next-build:${publicPort}/next-app/').getText()
+                def data = new URL('http://strumyk-next-build:${publicPort}/next-instance/').getText()
+                def start = data.indexOf('Wersja ')
+                return data.substring(start+6,start+17)`;
+
+            request.post(`http://strumyk-next-build:${publicPort}/executor/execute`).send({command: script}).end((err, res) => {
+                if (!err) {
+                    element.Status = element.Status += 'Started';
+                    Dispacher.dispach(new UpdateState(element));
+                } else {
+                    console.log('mam: ');
+                    element.Status = element.Status.replace('Started', '');
+                    Dispacher.dispach(new UpdateState(element));
+                }
+            });
+        }
+    }
+
     createImage(id, repo, tag) {
         NProgress.start();
         request.post(`/commit?container=${id}&comment=commit&repo=${repo}&tag=${tag}`).then((err, res)=> {
@@ -24,7 +54,7 @@ class ContainersActionCreator {
         });
     }
 
-    createContainer(name, image, port) {
+    createContainer({name, image, port, db}) {
         NProgress.start();
 
         var data = {
@@ -34,10 +64,13 @@ class ContainersActionCreator {
                 "Name": "no"
             },
             Cmd: ["/usr/bin/supervisord"],
-            Env: [`DOCKER_HTTP_PORT=${port}`, 'DOCKER_HTTP_ADDR=strumyk-next-build'],
+            Env: [`DOCKER_HTTP_PORT=${port}`, 'DOCKER_HTTP_ADDR=strumyk-next-build', `DOCKER_DB_HOST=${db.dbHost}`, `DOCKER_DB_PORT=${db.dbPort}`, `DOCKER_DB_NAME=${db.dbName}`, `DOCKER_DB_USER=${db.dbUser}`, `DOCKER_DB_PASSWORD=${db.dbPassword}`, `DOCKER_DB_MAPPING=${db.dbMapping}`],
             Image: image,
             ExposedPorts: {"80/tcp": {}, "9990/tcp": {}, "8000/tcp": {}, "5432/tcp": {}},
-            "Labels": {PrivateHostPort: "80", HostPort: port}
+            "Labels": {PrivateHostPort: "80", HostPort: port},
+            "Volumes": {
+                "/usr/local/jboss/jboss-as-7.1/standalone/log": {}
+            }
         };
 
         var run = {
@@ -149,4 +182,10 @@ export class SelectContainer {
 export class CreateContainer {
 }
 export class CreateImage {
+}
+
+export class UpdateState {
+    constructor(updated) {
+        this.updated = updated;
+    }
 }

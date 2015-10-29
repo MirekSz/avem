@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import request from 'superagent';
 import TableHeader from './TableHeader';
 import TableRow from './TableRow';
 import {observe} from './../lib/Decorators';
@@ -18,7 +18,7 @@ class Table extends Component {
             this.state.items = data;
             return this.state;
         }
-        return {items: this.props.store.getByCriteria({active: true}), active: true};
+        return {items: this.props.store.getByCriteria({active: false}), active: false};
     }
 
     componentDidMount() {
@@ -28,7 +28,6 @@ class Table extends Component {
     componentWillUnmount() {
         this.removeListenersToStore();
     }
-
 
     showActive() {
         var state = this.state;

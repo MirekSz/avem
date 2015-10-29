@@ -31,6 +31,13 @@ class ImagesStore extends BaseStore {
             case ac.CreateContainer:
                 ac.containersActionCreator.loadAll();
                 break;
+            case ac.UpdateState:
+                var updated = action.updated;
+                var data = this.getData();
+                var indexOf = data.indexOf(updated);
+                data[indexOf] = updated;
+                this.setData(data);
+                break;
             default:
         }
     }
@@ -58,8 +65,17 @@ class ImagesStore extends BaseStore {
 
     initImpl() {
         ac.containersActionCreator.loadAll();
+        setInterval(stateLocator.bind(this), 10000);
     }
 
+}
+function stateLocator() {
+    var data = this.getData();
+
+    for (var i = 0; i < data.length; i++) {
+        let obj = data[i];
+        ac.containersActionCreator.checkAppState(obj);
+    }
 }
 export default new ImagesStore();
 

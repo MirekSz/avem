@@ -12,7 +12,17 @@ class ContainerForm extends Component {
     }
 
     getData() {
-        return {data: this.props.store.getData()};
+        return {
+            data: this.props.store.getData(),
+            db: {
+                dbHost: 'localhost',
+                dbPort: 5432,
+                dbName: 'verto_db',
+                dbUser: 'verto',
+                dbPassword: 'vertoverto',
+                dbMapping: 'VERTO=VERTO;WMS=WMS'
+            }
+        };
     }
 
     componentDidMount() {
@@ -25,6 +35,16 @@ class ContainerForm extends Component {
         });
     }
 
+    acceptValue(e) {
+        console.log('e.target: ');
+        console.log(e.target.name);
+
+        console.log(e.target.value);
+        var s = this.state;
+        s.db[e.target.name] = e.target.value;
+        this.setState(s);
+    }
+
     componentWillUnmount() {
         this.removeListenersToStore();
     }
@@ -34,7 +54,11 @@ class ContainerForm extends Component {
         var name = React.findDOMNode(this.refs.name).value.trim();
         var image = React.findDOMNode(this.refs.image).value.trim();
         var port = React.findDOMNode(this.refs.port).value.trim();
-        containersActionCreator.createContainer(name, image, port);
+
+
+        var db = this.state.db;
+
+        containersActionCreator.createContainer({name, image, port, db});
     }
 
     render() {
@@ -72,29 +96,40 @@ class ContainerForm extends Component {
                             <div className="form-group col-xs-2">
                                 <label >Host</label>
                                 <input type="text" className="form-control" required="required"
-                                       placeholder="strumyk-next"/>
+                                       name="dbHost"
+                                       onChange={this.acceptValue.bind(this)}
+                                       value={this.state.db.dbHost}/>
                             </div>
+
                             <div className="form-group col-xs-1">
                                 <label >Port</label>
-                                <input type="text" className="form-control" required="required" placeholder="5432"/>
+                                <input type="text" className="form-control" required="required"
+                                       onChange={this.acceptValue.bind(this)}
+                                       name="dbPort" value={this.state.db.dbPort}/>
                             </div>
                             <div className="form-group col-xs-2">
                                 <label >Db name</label>
-                                <input type="text" className="form-control" required="required" placeholder="verto_db"/>
+                                <input type="text" className="form-control" required="required"
+                                       onChange={this.acceptValue.bind(this)}
+                                       name="dbName" value={this.state.db.dbName}/>
                             </div>
                             <div className="form-group col-xs-2">
                                 <label >User</label>
-                                <input type="text" className="form-control" required="required" placeholder="verto"/>
+                                <input type="text" className="form-control" required="required"
+                                       onChange={this.acceptValue.bind(this)}
+                                       name="dbUser" value={this.state.db.dbUser}/>
                             </div>
                             <div className="form-group col-xs-2">
                                 <label >Password</label>
                                 <input type="text" className="form-control" required="required"
-                                       placeholder="vertoverto"/>
+                                       onChange={this.acceptValue.bind(this)}
+                                       name="dbPassword" value={this.state.db.dbPassword}/>
                             </div>
                             <div className="form-group col-xs-3">
                                 <label >Schema mapping</label>
                                 <input type="text" className="form-control" required="required"
-                                       placeholder="VERTO=VERTO_DEV;WMS=EKS"/>
+                                       onChange={this.acceptValue.bind(this)}
+                                       name="dbMapping" value={this.state.db.dbMapping}/>
                             </div>
                         </div>
                         <div className="form-group">
