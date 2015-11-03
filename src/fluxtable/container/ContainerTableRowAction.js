@@ -41,7 +41,6 @@ export default class ContainerTableRowAction extends Component {
             var id = this.props.row.Id;
             var repo = value.split(":")[0];
             var tag = value.split(":")[1];
-            debugger;
             containersActionCreator.createImage(id, repo, tag);
         })
     }
@@ -49,15 +48,15 @@ export default class ContainerTableRowAction extends Component {
     render() {
         return (
             <td>
-                <a href="#" onClick={this.open.bind(this)}><span
+                <a href="#" title="Show" onClick={this.open.bind(this)}><span
                     className="glyphicon glyphicon-search"></span></a> &nbsp;&nbsp;
-                <a href="#" onClick={this.startContainer.bind(this)}><span
+                <a href="#" title="Start" onClick={this.startContainer.bind(this)}><span
                     className="glyphicon glyphicon-play"></span></a>&nbsp;&nbsp;
-                <a href="#" onClick={this.stopContainer.bind(this)}><span
+                <a href="#" title="Stop" onClick={this.stopContainer.bind(this)}><span
                     className="glyphicon glyphicon-stop"></span></a>&nbsp;&nbsp;
-                <a href="#" onClick={this.createImage.bind(this)}><span
+                <a href="#" title="Tag" onClick={this.createImage.bind(this)}><span
                     className="glyphicon glyphicon-tags"></span></a>&nbsp;&nbsp;
-                <a href="#" onClick={this.removeContainer.bind(this)}><span
+                <a href="#" title="Delete" onClick={this.removeContainer.bind(this)}><span
                     className="glyphicon glyphicon-trash"></span></a>
 
             </td>

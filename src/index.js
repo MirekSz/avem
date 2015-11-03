@@ -38,7 +38,14 @@ $(document).ready(function () {
             name: 'VirtualSize', formater: (value)=> {
                 return Math.floor(value / 1000000) + ' MB';
             }
+        }, {
+            name: 'Created', formater: (value)=> {
+                var t = new Date(parseInt(value * 1000) + 1000 * 60 * 60);
+                return t.toISOString().slice(0, 16).replace('T', ' ');
+            }
         }];
+
+
         React.render(<div><Table store={ImagesStore} headers={headers} actions={ImageTableRowAction}/>
         </div>, document.getElementById('root'));
 

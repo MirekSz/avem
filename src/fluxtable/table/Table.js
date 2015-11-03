@@ -5,7 +5,7 @@ import TableRow from './TableRow';
 import {observe} from './../lib/Decorators';
 
 export default @observe
-class Table extends Component {
+class TableComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -63,8 +63,7 @@ class Table extends Component {
                                 <div className="input-group-btn">
                                     <button onClick={this.showActive.bind(this)} type="button"
                                             className={clazz} style={color}
-                                            data-toggle="button"><span
-                                        className="glyphicon glyphicon-ok"></span>
+                                            data-toggle="button"><span className="glyphicon glyphicon-ok"/>
                                     </button>
                                 </div>
                                 <input type="text" aria-label="Text input with multiple buttons"

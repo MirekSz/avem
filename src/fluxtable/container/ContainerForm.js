@@ -20,7 +20,7 @@ class ContainerForm extends Component {
                 dbName: 'verto_db',
                 dbUser: 'verto',
                 dbPassword: 'vertoverto',
-                dbMapping: 'VERTO=VERTO;WMS=WMS'
+                dbMapping: 'VERTO=VERTO'
             }
         };
     }
@@ -54,11 +54,15 @@ class ContainerForm extends Component {
         var name = React.findDOMNode(this.refs.name).value.trim();
         var image = React.findDOMNode(this.refs.image).value.trim();
         var port = React.findDOMNode(this.refs.port).value.trim();
+        var ver = React.findDOMNode(this.refs.ver).value.trim();
 
+        if (ver) {
+            ver = '1.0.' + ver;
+        }
 
         var db = this.state.db;
 
-        containersActionCreator.createContainer({name, image, port, db});
+        containersActionCreator.createContainer({name, image, port, ver, db});
     }
 
     render() {
@@ -79,7 +83,7 @@ class ContainerForm extends Component {
                 </div>
 
                 <div className=" panel-body">
-                    <form>
+                    <form onSubmit={this.create.bind(this)}>
                         <div className="form-group">
                             <label for="ports">Name</label>
                             <input type="text" className="form-control" ref="name" required="required"/>
@@ -91,7 +95,11 @@ class ContainerForm extends Component {
                                 {options}
                             </select>
                         </div>
-
+                        <div className="form-group">
+                            <label for="ver">Version</label>
+                            <input type="text" className="form-control" ref="ver"
+                                   placeholder="147.91"/>
+                        </div>
                         <div className="row">
                             <div className="form-group col-xs-2">
                                 <label >Host</label>
@@ -137,7 +145,7 @@ class ContainerForm extends Component {
                             <input type="text" readonly disabled className="form-control" ref="port"
                                    value={this.state.port}/>
                         </div>
-                        <button type="submit" className="btn btn-default" onClick={this.create.bind(this)}>Zapisz
+                        <button type="submit" className="btn btn-default">Zapisz
                         </button>
                     </form>
                 </div>

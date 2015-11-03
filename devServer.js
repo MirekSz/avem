@@ -29,6 +29,9 @@ app.use(require('webpack-hot-middleware')(compiler));
 app.get('/assets/:name', function (req, res) {
     res.sendFile(path.join(__dirname, req.originalUrl));
 });
+app.get('/assets/*/:name', function (req, res) {
+    res.sendFile(path.join(__dirname, req.originalUrl));
+});
 
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));

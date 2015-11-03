@@ -24,8 +24,6 @@ class ContainerDetails extends Component {
 
             console.log(res.body);
         });
-
-//
     }
 
     componentDidMount() {
@@ -42,9 +40,13 @@ class ContainerDetails extends Component {
         }
 
         var mapping = this.state.selected.Ports.map((obj)=> {
-            return <li>{obj.PrivatePort + ' -> ' + obj.PublicPort}</li>
+            return <li>{obj.PrivatePort + ' = ' + obj.PublicPort}</li>
         });
 
+        var dockerLabels = [];
+        for (var obj  in     this.state.selected.Labels) {
+            dockerLabels.push(<li>{obj.replace('DOCKER_', '') + ' = ' + this.state.selected.Labels[obj]}</li>);
+        }
         if (mapping.length == 0) {
             var labels = this.state.selected.Labels;
             mapping = <li>{labels.PrivateHostPort + ' -> ' + labels.HostPort}</li>;
@@ -52,19 +54,20 @@ class ContainerDetails extends Component {
         return (
             <form>
                 <div className="form-group">
-                    <textarea type="text" id="command" ref="command" className="form-control" rows="5"/>
-                    <button className="btn btn-primary pull-right" onClick={this.execute.bind(this)}>Execute</button>
-                </div>
-                <div className="form-group">
                     <label for="image">Image</label>
                     <input type="text" className="form-control" id="image" value={this.state.selected.Image}
                            readonly/>
                 </div>
-
                 <div className="form-group">
                     <label for="ports">Ports</label>
                     <ul>
                         {mapping}
+                    </ul>
+                </div>
+                <div className="form-group">
+                    <label for="labels">Labels</label>
+                    <ul>
+                        {dockerLabels}
                     </ul>
                 </div>
                 <div className="form-group">

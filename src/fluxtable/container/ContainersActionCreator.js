@@ -27,10 +27,14 @@ class ContainersActionCreator {
 
             request.post(`http://strumyk-next-build:${publicPort}/executor/execute`).send({command: script}).end((err, res) => {
                 if (!err) {
+                    if (element.Status.indexOf('Started') != -1) {
+                        return;
+                    }
                     element.Status = element.Status += 'Started';
                     Dispacher.dispach(new UpdateState(element));
+                    var audio = new Audio('assets/NFF-choice-good.wav');
+                    audio.play();
                 } else {
-                    console.log('mam: ');
                     element.Status = element.Status.replace('Started', '');
                     Dispacher.dispach(new UpdateState(element));
                 }
@@ -54,9 +58,11 @@ class ContainersActionCreator {
         });
     }
 
-    createContainer({name, image, port, db}) {
+    createContainer({name, image, port, ver, db}) {
         NProgress.start();
+        var instance = Math.floor((Date.now() + '').substring(4));
 
+        var env = [`DOCKER_HTTP_PORT=${port}`, `DOCKER_APP_INSTANCE=${instance}`, `DOCKER_APP_VERTION=${ver}`, 'DOCKER_HTTP_ADDR=strumyk-next-build', `DOCKER_DB_HOST=${db.dbHost}`, `DOCKER_DB_PORT=${db.dbPort}`, `DOCKER_DB_NAME=${db.dbName}`, `DOCKER_DB_USER=${db.dbUser}`, `DOCKER_DB_PASSWORD=${db.dbPassword}`, `DOCKER_DB_MAPPING=${db.dbMapping}`];
         var data = {
             Tty: true,
             RestartPolicy: {
@@ -64,7 +70,7 @@ class ContainersActionCreator {
                 "Name": "no"
             },
             Cmd: ["/usr/bin/supervisord"],
-            Env: [`DOCKER_HTTP_PORT=${port}`, 'DOCKER_HTTP_ADDR=strumyk-next-build', `DOCKER_DB_HOST=${db.dbHost}`, `DOCKER_DB_PORT=${db.dbPort}`, `DOCKER_DB_NAME=${db.dbName}`, `DOCKER_DB_USER=${db.dbUser}`, `DOCKER_DB_PASSWORD=${db.dbPassword}`, `DOCKER_DB_MAPPING=${db.dbMapping}`],
+            Env: env,
             Image: image,
             ExposedPorts: {"80/tcp": {}, "9990/tcp": {}, "8000/tcp": {}, "5432/tcp": {}},
             "Labels": {PrivateHostPort: "80", HostPort: port},
@@ -72,6 +78,12 @@ class ContainersActionCreator {
                 "/usr/local/jboss/jboss-as-7.1/standalone/log": {}
             }
         };
+
+        for (var i = 0; i < env.length; i++) {
+            var obj = env[i];
+            var arr = obj.split('=');
+            data.Labels[arr[0]] = arr[1];
+        }
 
         var run = {
             "PortBindings": {
@@ -81,7 +93,6 @@ class ContainersActionCreator {
                 "5432/tcp": [{"HostPort": (Number(port) + 6 + '')}]
             }
         };
-
         request.post(`/containers/create?name=${name}`).send(data).end((err, res)=> {
             if (err) {
                 Dialogs.showError(err.response.statusText, err.response.text);
