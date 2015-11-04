@@ -20,6 +20,7 @@ class PortService {
 
     findNextPort(data) {
         var bookedPorts = [];
+        bookedPorts.push(8080);
         for (let i = 0; i < data.length; i++) {
             var container = data[i];
             for (var j = 0; j < container.Ports.length; j++) {

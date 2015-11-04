@@ -3,7 +3,6 @@ import request from 'superagent';
 import TableHeader from './TableHeader';
 import TableRow from './TableRow';
 import {observe} from './../lib/Decorators';
-
 export default @observe
 class TableComponent extends Component {
 

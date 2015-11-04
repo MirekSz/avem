@@ -13,7 +13,7 @@ var headers = [{name: 'Id', visible: false}, {name: 'Names'}, {
 }, {
     name: 'Status', formater: (value, row, style)=> {
         var started;
-        if (value.indexOf('Started') == -1) {
+        if (!row.started) {
             started = <span className='glyphicon glyphicon-send' title="App Down"
                             style={{color: 'red', fontSize: '20px'}}></span>
         } else {

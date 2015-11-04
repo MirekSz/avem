@@ -20,22 +20,27 @@ class ContainersActionCreator {
 
         if (publicPort) {
             var script = `
-                new URL('http://strumyk-next-build:${publicPort}/next-app/').getText()
+                new URL('http://strumyk-next-build:${publicPort}/next-app/').getText();
+                Authenticator.setDefault (new Authenticator() {
+                     protected PasswordAuthentication getPasswordAuthentication() {
+                           return new PasswordAuthentication ("admin", "admin".toCharArray());
+                     }
+                });
                 def data = new URL('http://strumyk-next-build:${publicPort}/next-instance/').getText()
                 def start = data.indexOf('Wersja ')
                 return data.substring(start+6,start+17)`;
 
             request.post(`http://strumyk-next-build:${publicPort}/executor/execute`).send({command: script}).end((err, res) => {
                 if (!err) {
-                    if (element.Status.indexOf('Started') != -1) {
+                    if (element.started) {
                         return;
                     }
-                    element.Status = element.Status += 'Started';
+                    element.started = true;
                     Dispacher.dispach(new UpdateState(element));
                     var audio = new Audio('assets/NFF-choice-good.wav');
                     audio.play();
                 } else {
-                    element.Status = element.Status.replace('Started', '');
+                    element.started = false;
                     Dispacher.dispach(new UpdateState(element));
                 }
             });

@@ -13,8 +13,6 @@ class Dispacher {
 
         for (var i = 0; i < this.listeners.length; i++) {
             var listener = this.listeners[i];
-            console.log('listener: ');
-            console.log(listener);
             listener(action);
         }
     }

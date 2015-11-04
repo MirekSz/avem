@@ -15,17 +15,6 @@ class ContainerDetails extends Component {
         return {selected: this.props.store.getSelected()};
     }
 
-    execute(e) {
-        e.preventDefault();
-        var command = React.findDOMNode(this.refs.command).value;
-        request.post('http://strumyk-next-build:8010/executor/shell').send({command: command}).end((err, res) => {
-            Dialogs.showInfo('yo', res.body.response);
-            console.log('res.body: ');
-
-            console.log(res.body);
-        });
-    }
-
     componentDidMount() {
         this.addListenersToStore();
     }
@@ -38,36 +27,32 @@ class ContainerDetails extends Component {
         if (!this.state.selected) {
             return null;
         }
+        var version = getVersion(this.state.selected.Labels);
+        var appPorts = getPortsList(this.state.selected);
+        var dbPorts = getDbPorts(this.state.selected);
 
-        var mapping = this.state.selected.Ports.map((obj)=> {
-            return <li>{obj.PrivatePort + ' = ' + obj.PublicPort}</li>
-        });
-
-        var dockerLabels = [];
-        for (var obj  in     this.state.selected.Labels) {
-            dockerLabels.push(<li>{obj.replace('DOCKER_', '') + ' = ' + this.state.selected.Labels[obj]}</li>);
-        }
-        if (mapping.length == 0) {
-            var labels = this.state.selected.Labels;
-            mapping = <li>{labels.PrivateHostPort + ' -> ' + labels.HostPort}</li>;
-        }
         return (
             <form>
                 <div className="form-group">
+                    <label for="version">Version</label>
+                    <input type="text" className="form-control" id="version" value={version}
+                           readOnly/>
+                </div>
+                <div className="form-group">
                     <label for="image">Image</label>
                     <input type="text" className="form-control" id="image" value={this.state.selected.Image}
-                           readonly/>
+                           readOnly/>
                 </div>
                 <div className="form-group">
                     <label for="ports">Ports</label>
                     <ul>
-                        {mapping}
+                        {appPorts}
                     </ul>
                 </div>
                 <div className="form-group">
                     <label for="labels">Labels</label>
                     <ul>
-                        {dockerLabels}
+                        {dbPorts}
                     </ul>
                 </div>
                 <div className="form-group">
@@ -80,4 +65,37 @@ class ContainerDetails extends Component {
 
 
     }
+}
+
+function getPortsList(selected) {
+    var ports = selected.Ports.map((obj)=> {
+        return <li>{obj.PrivatePort + ' = ' + obj.PublicPort}</li>
+    });
+
+    if (ports.length == 0) {
+        var labels = selected.Labels;
+        ports = <li>{labels.PrivateHostPort + ' -> ' + labels.HostPort}</li>;
+    }
+    return ports;
+}
+
+function getVersion(labels) {
+    for (var obj  in  labels) {
+        var value = labels[obj];
+        if (obj == 'DOCKER_APP_VERTION' && value) {
+            return value;
+        }
+    }
+    return 'LAST'
+}
+
+function getDbPorts(selected) {
+    var ports = [];
+    for (var obj  in   selected.Labels) {
+        var value = selected.Labels[obj];
+        if (obj.indexOf('DB') != -1) {
+            ports.push(<li>{obj.replace('DOCKER_', '') + ' = ' + value}</li>);
+        }
+    }
+    return ports;
 }

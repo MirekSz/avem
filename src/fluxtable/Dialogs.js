@@ -47,6 +47,3 @@ export default class Dialogs {
         });
     }
 }
-function yo() {
-    alert(this.props.row.Id)
-}

@@ -28,7 +28,7 @@ export default class TableRow extends Component {
             var value = this.props.row[col.name];
 
             if (col.formater) {
-                value = col.formater(value, col, style);
+                value = col.formater(value, row, style);
             }
 
             if (col.visible == undefined || col.visible) {

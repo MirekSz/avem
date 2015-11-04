@@ -4,16 +4,17 @@ var webpack = require('webpack');
 module.exports = {
     devtool: 'source-map',
     entry: {
-        app: './src/index'
+        app: './src/index',
+        vendor: ['react', 'react/addons', 'superagent']
     },
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: 'bundle.js',
-        publicPath: '/static/',
-        chunkFilename: "[chunkhash].bundle.js"
+        filename: '[hash].bundle.js',
+        publicPath: '/static/'
     },
     plugins: [
-        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.OccurenceOrderPlugin(true),
+        new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
         new webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': JSON.stringify('production')
