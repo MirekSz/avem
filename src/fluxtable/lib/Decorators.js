@@ -22,3 +22,24 @@ export function observe(target) {
         this.props.store.removeListener(this.listener);
     }
 }
+
+export function observable(target) {
+    target.listeners = [];
+
+    target.prototype.addListener = function (listener) {
+        target.listeners.push(listener);
+    };
+
+    target.prototype.removeListener = function (listener) {
+        var index = target.listeners.indexOf(listener);
+        target.listeners.splice(index, 1);
+    };
+
+    target.prototype.emmit = function (event) {
+        for (var i = 0; i < target.listeners.length; i++) {
+            var listener = target.listeners[i];
+            listener(event);
+        }
+    };
+
+}

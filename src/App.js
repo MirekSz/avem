@@ -2,11 +2,17 @@ import React, { Component } from 'react/addons';
 
 import ImagesStore from './fluxtable/image/ImagesStore';
 import ContainersStore from './fluxtable/container/ContainersStore';
+import {UpdateState} from './fluxtable/container/ContainersActionCreator';
 import ContainerDetails from './fluxtable/container/ContainerDetails';
 import ContainerTable from './fluxtable/container/ContainerTable';
 import StateManager from './fluxtable/lib/StateManager'
+import SoundNotifier from './fluxtable/SoundNotifier';
+
 StateManager.start();
 
+function titleMod(action) {
+    document.title = action.updated.Names + ' Ready \u2605';
+}
 export default class App extends Component {
 
     constructor(props) {
@@ -17,6 +23,7 @@ export default class App extends Component {
     render() {
         return (
             <div className="row">
+                <SoundNotifier eventType={UpdateState} extraFeature={titleMod}/>
                 <div className="col-md-8">
                     <ContainerTable />
                 </div>

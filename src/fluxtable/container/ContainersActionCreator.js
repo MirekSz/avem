@@ -28,7 +28,7 @@ class ContainersActionCreator {
                 });
                 def data = new URL('http://strumyk-next-build:${publicPort}/next-instance/').getText()
                 def start = data.indexOf('Wersja ')
-                return data.substring(start+6,start+17)`;
+                return data.substring(start+6,start+18).replace('<','')`;
 
             request.post(`http://strumyk-next-build:${publicPort}/executor/execute`).send({command: script}).end((err, res) => {
                 if (!err) {
@@ -36,9 +36,8 @@ class ContainersActionCreator {
                         return;
                     }
                     element.started = true;
+                    element.ver = res.body.response;
                     Dispacher.dispach(new UpdateState(element));
-                    var audio = new Audio('assets/NFF-choice-good.wav');
-                    audio.play();
                 } else {
                     element.started = false;
                     Dispacher.dispach(new UpdateState(element));
@@ -49,7 +48,7 @@ class ContainersActionCreator {
 
     createImage(id, repo, tag) {
         NProgress.start();
-        request.post(`/commit?container=${id}&comment=commit&repo=${repo}&tag=${tag}`).then((err, res)=> {
+        request.post(`/commit?container=${id}&comment=commit&repo=${repo}&tag=${tag}`).set('Accept', 'application/json').then((err, res)=> {
             if (err.status == 201) {
                 Dispacher.dispach(new CreateImage());
                 NProgress.done();
@@ -98,23 +97,24 @@ class ContainersActionCreator {
                 "5432/tcp": [{"HostPort": (Number(port) + 6 + '')}]
             }
         };
-        request.post(`/containers/create?name=${name}`).send(data).end((err, res)=> {
+        request.post(`/containers/create?name=${name}`).set('Accept', 'application/json').send(data).end((err, res)=> {
             if (err) {
                 Dialogs.showError(err.response.statusText, err.response.text);
+            } else {
+                var id = res.body.Id;
+                request.post(`/containers/${id}/start`).set('Accept', 'application/json').send(run).end((err, res)=> {
+                    if (err) {
+                        Dialogs.showError(err.response.statusText, err.response.text);
+                    }
+                    Dispacher.dispach(new CreateContainer());
+                    NProgress.done();
+                });
             }
-            var id = res.body.Id;
-            request.post(`/containers/${id}/start`).send(run).end((err, res)=> {
-                if (err) {
-                    Dialogs.showError(err.response.statusText, err.response.text);
-                }
-                Dispacher.dispach(new CreateContainer());
-                NProgress.done();
-            });
         });
     }
 
     loadAll() {
-        var execute = request.get('/containers/json?all=true');
+        var execute = request.get('/containers/json?all=true').set('Accept', 'application/json');
 
         this.addCallback(execute, (err, res) => {
             Dispacher.dispach(new LoadAllContainers(res.body));
@@ -152,6 +152,7 @@ class ContainersActionCreator {
     addCallback(request, callback) {
         NProgress.start();
         request
+            .set('Accept', 'application/json')
             .end((err, res) => {
                 if (err) {
                     Dialogs.showError(err.response.statusText, err.response.text);

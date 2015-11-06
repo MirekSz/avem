@@ -27,38 +27,38 @@ class ContainerDetails extends Component {
         if (!this.state.selected) {
             return null;
         }
-        var version = getVersion(this.state.selected.Labels);
+        var version = getVersion(this.state.selected);
         var appPorts = getPortsList(this.state.selected);
         var dbPorts = getDbPorts(this.state.selected);
 
         return (
             <form>
                 <div className="form-group">
-                    <label for="version">Version</label>
+                    <label >Version</label>
                     <input type="text" className="form-control" id="version" value={version}
                            readOnly/>
                 </div>
                 <div className="form-group">
-                    <label for="image">Image</label>
+                    <label>Image</label>
                     <input type="text" className="form-control" id="image" value={this.state.selected.Image}
                            readOnly/>
                 </div>
                 <div className="form-group">
-                    <label for="ports">Ports</label>
+                    <label>Ports</label>
                     <ul>
                         {appPorts}
                     </ul>
                 </div>
                 <div className="form-group">
-                    <label for="labels">Labels</label>
+                    <label >Labels</label>
                     <ul>
                         {dbPorts}
                     </ul>
                 </div>
                 <div className="form-group">
-                    <label for="ports">Bash</label>
+                    <label >Bash</label>
                     <input type="text" className="form-control" id="ports"
-                           value={'docker exec -it "'+this.state.selected.Names[0].substring(1)+'" bash'} readonly/>
+                           value={'docker exec -it "'+this.state.selected.Names[0].substring(1)+'" bash'} readOnly/>
                 </div>
             </form>
         );
@@ -67,9 +67,15 @@ class ContainerDetails extends Component {
     }
 }
 
+var portInfo = new Map();
+portInfo.set(80, 'HTTP');
+portInfo.set(5432, 'Database');
+portInfo.set(8000, 'DEBUG');
+portInfo.set(9990, 'Admin Console');
+
 function getPortsList(selected) {
     var ports = selected.Ports.map((obj)=> {
-        return <li>{obj.PrivatePort + ' = ' + obj.PublicPort}</li>
+        return <li key={obj.PrivatePort}>{portInfo.get(obj.PrivatePort) + ' = ' + obj.PublicPort}</li>
     });
 
     if (ports.length == 0) {
@@ -79,14 +85,18 @@ function getPortsList(selected) {
     return ports;
 }
 
-function getVersion(labels) {
+function getVersion(selected) {
+    var labels = selected.Labels;
     for (var obj  in  labels) {
         var value = labels[obj];
         if (obj == 'DOCKER_APP_VERTION' && value) {
             return value;
         }
     }
-    return 'LAST'
+    if (selected.ver) {
+        return `LAST (${selected.ver})`;
+    }
+    return 'LAST';
 }
 
 function getDbPorts(selected) {
@@ -94,7 +104,7 @@ function getDbPorts(selected) {
     for (var obj  in   selected.Labels) {
         var value = selected.Labels[obj];
         if (obj.indexOf('DB') != -1) {
-            ports.push(<li>{obj.replace('DOCKER_', '') + ' = ' + value}</li>);
+            ports.push(<li key={obj}>{obj.replace('DOCKER_', '') + ' = ' + value}</li>);
         }
     }
     return ports;

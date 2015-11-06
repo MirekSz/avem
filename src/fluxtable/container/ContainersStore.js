@@ -3,7 +3,10 @@
  */
 import BaseStore from './../lib/BaseStore'
 import * as ac from './ContainersActionCreator';
-class ImagesStore extends BaseStore {
+import _sortByOrder from 'lodash/collection/sortByOrder';
+import _filter from 'lodash/collection/filter';
+
+class ContainersStore extends BaseStore {
     constructor() {
         super();
     }
@@ -54,9 +57,11 @@ class ImagesStore extends BaseStore {
     getByCriteria({active, query}) {
         var data = active ? this.getActiveElements() : this.getData();
         if (query) {
-            return data.filter((element)=>element.Names[0].indexOf(query) != -1)
+            return _sortByOrder(data.filter((element)=>element.Names[0].indexOf(query) != -1), ['Names'])
         }
-        return data;
+        return _sortByOrder(_filter(data, (row)=> {
+            return row.Names[0].indexOf('next') == -1;
+        }), ['Names']);
     }
 
     getSelected() {
@@ -65,7 +70,8 @@ class ImagesStore extends BaseStore {
 
     initImpl() {
         ac.containersActionCreator.loadAll();
-        setInterval(stateLocator.bind(this), 10000);
+        setInterval(stateLocator.bind(this), 60000);
+        setTimeout(stateLocator.bind(this), 5000);
     }
 
 }
@@ -77,5 +83,5 @@ function stateLocator() {
         ac.containersActionCreator.checkAppState(obj);
     }
 }
-export default new ImagesStore();
+export default new ContainersStore();
 

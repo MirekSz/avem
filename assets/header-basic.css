@@ -53,8 +53,6 @@
 
 .header-basic .header-limiter nav a.selected {
     color: #608bd2;
-    pointer-events: none;
-    opacity: 1;
 }
 
 /* Making the header responsive */

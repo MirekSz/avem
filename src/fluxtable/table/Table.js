@@ -3,8 +3,9 @@ import request from 'superagent';
 import TableHeader from './TableHeader';
 import TableRow from './TableRow';
 import {observe} from './../lib/Decorators';
-export default @observe
-class TableComponent extends Component {
+
+@observe
+export default class TableComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -86,4 +87,3 @@ class TableComponent extends Component {
         );
     }
 }
-

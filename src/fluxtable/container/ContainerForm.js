@@ -51,6 +51,7 @@ class ContainerForm extends Component {
 
     create(e) {
         e.preventDefault();
+
         var name = React.findDOMNode(this.refs.name).value.trim();
         var image = React.findDOMNode(this.refs.image).value.trim();
         var port = React.findDOMNode(this.refs.port).value.trim();

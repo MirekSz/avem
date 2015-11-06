@@ -31,7 +31,11 @@ function addRouting() {
 
         React.render(<div><ContainerForm store={ImagesStore}/></div>, document.getElementById('root'));
     });
+    $('a.selected').click(function () {
+        React.unmountComponentAtNode(document.getElementById('root'));
 
+        React.render(<div><App /></div>, document.getElementById('root'));
+    });
     $('#home').click(function () {
         React.unmountComponentAtNode(document.getElementById('root'));
 
