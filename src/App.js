@@ -13,6 +13,11 @@ StateManager.start();
 function titleMod(action) {
     document.title = action.updated.Names + ' Ready \u2605';
 }
+function supports(action) {
+    var newVar = (action instanceof UpdateState) && action.updated.started;
+    return newVar;
+}
+
 export default class App extends Component {
 
     constructor(props) {
@@ -23,7 +28,7 @@ export default class App extends Component {
     render() {
         return (
             <div className="row">
-                <SoundNotifier eventType={UpdateState} extraFeature={titleMod}/>
+                <SoundNotifier supports={supports} extraFeature={titleMod}/>
                 <div className="col-md-8">
                     <ContainerTable />
                 </div>

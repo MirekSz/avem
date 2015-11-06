@@ -3,7 +3,7 @@ import Dispacher from './lib/Dispacher';
 
 var SoundNotifier = React.createClass({
     propTypes: {
-        eventType: React.PropTypes.func.isRequired,
+        supports: React.PropTypes.func.isRequired,
         extraFeature: React.PropTypes.func
     },
     componentDidMount(){
@@ -16,7 +16,7 @@ var SoundNotifier = React.createClass({
         return null;
     },
     storeChanged(action){
-        if (action instanceof this.props.eventType) {
+        if (this.props.supports(action)) {
             var audio = new Audio('assets/NFF-choice-good.wav');
             audio.play();
             if (this.props.extraFeature) {
