@@ -1,6 +1,7 @@
 import React, { Component } from 'react/addons';
 import TableComponent from '../table/Table';
 import ContainersStore from './ContainersStore';
+import ImagesStore from '../image/ImagesStore';
 import ContainerTableRowAction from './ContainerTableRowAction';
 import {containersActionCreator as ac} from './ContainersActionCreator';
 
@@ -41,6 +42,13 @@ export default class ContainerTable extends Component {
 
 
     render() {
-        return (<TableComponent store={ContainersStore} headers={headers} actions={ContainerTableRowAction} ac={ac}/>);
+        var data = ImagesStore.getData();
+        return (<TableComponent store={ContainersStore} headers={headers} actions={ContainerTableRowAction}
+                                ac={ac}>
+            <div className="col-md-3">
+                <select className="form-control" ref="image" required="required">
+                </select>
+            </div>
+        </TableComponent>);
     }
 }

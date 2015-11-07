@@ -36,10 +36,6 @@ class ContainerForm extends Component {
     }
 
     acceptValue(e) {
-        console.log('e.target: ');
-        console.log(e.target.name);
-
-        console.log(e.target.value);
         var s = this.state;
         s.db[e.target.name] = e.target.value;
         this.setState(s);

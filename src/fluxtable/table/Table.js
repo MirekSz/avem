@@ -53,11 +53,12 @@ export default class TableComponent extends Component {
             <div className="panel panel-default">
                 <div className="panel-heading">
                     <div className="row">
-                        <div className="col-md-8">
+                        <div className="col-md-5">
                             <h3 className="panel-title">
                                 Servers
                             </h3>
                         </div>
+                        {this.props.children}
                         <div className="col-md-4">
                             <div className="input-group">
                                 <div className="input-group-btn">
