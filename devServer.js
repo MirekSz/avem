@@ -21,6 +21,10 @@ function apiProxy(host, port) {
 app.use(apiProxy('localhost', 3000));
 app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
+    watchOptions: {
+        aggregateTimeout: 300,
+        poll: 1000
+    },
     publicPath: config.output.publicPath
 }));
 

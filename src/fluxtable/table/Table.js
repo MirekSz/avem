@@ -10,15 +10,21 @@ export default class TableComponent extends Component {
     constructor(props) {
         super(props);
         this.state = this.getData();//{items: []};
+        this.state.filters = {};
+
+        for (var i = 0; i < this.props.filters.length; i++) {
+            var obj = this.props.filters[i];
+            obj.init(this);
+        }
     }
 
     getData() {
         if (this.state) {
-            var data = this.props.store.getByCriteria({active: this.state.active, query: this.state.query});
+            var data = this.props.store.getByCriteria({filters: this.state.filters, query: this.state.query});
             this.state.items = data;
             return this.state;
         }
-        return {items: this.props.store.getByCriteria({active: false}), active: false};
+        return {items: this.props.store.getByCriteria()};
     }
 
     componentDidMount() {
@@ -29,12 +35,6 @@ export default class TableComponent extends Component {
         this.removeListenersToStore();
     }
 
-    showActive() {
-        var state = this.state;
-        state.active = !state.active;
-        this.setState(this.getData());
-    }
-
     search(e) {
         var query = React.findDOMNode(this.refs.search).value.trim();
         this.state.query = query;
@@ -42,8 +42,8 @@ export default class TableComponent extends Component {
     }
 
     render() {
-        var filters = this.props.filters.map((filter)=> <li><a href="#"
-                                                               onClick={filter.action.bind(this)}>{filter.getPresentation.bind(this)()}</a>
+        var filters = this.props.filters.map((filter)=> <li key={filter}><a href="#"
+                                                                            onClick={filter.action.bind(filter)}>{filter.getPresentation()}</a>
         </li>);
 
         var rows = this.state.items.map((obj, index)=><TableRow headers={this.props.headers} row={obj}
@@ -65,7 +65,7 @@ export default class TableComponent extends Component {
                             <div className="btn-group  pull-right">
                                 <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
-                                    Action <span className="caret"></span>
+                                    Filters <span className="caret"></span>
                                 </button>
                                 <ul className="dropdown-menu">
                                     {filters}

@@ -37,18 +37,16 @@ var headers = [{name: 'Id', visible: false}, {name: 'Names'}, {
 }, {name: 'Image', visible: false}];
 
 
-class SomeFilter extends BaseFilter {
-    action() {
-        var state = this.state;
-        state.active = !state.active;
-        this.setState(this.getData());
+class ActiveFilter extends BaseFilter {
+    actionImpl(filters) {
+        filters.active = !filters.active;
     }
 
-    getPresentation() {
-        var color = {color: ( this.state.active ? 'green' : 'red')};
+    getPresentationImpl(filters) {
+        var color = {color: ( filters.active ? 'green' : 'red')};
 
         return (<div>
-            <button type="button" onClick={this.yo} className="btn btn-primary" style={color}
+            <button type="button" className="btn btn-primary" style={color}
                     data-toggle="button"><span className="glyphicon glyphicon-ok"/>
             </button>
             &nbsp;Active
@@ -64,7 +62,7 @@ export default class ContainerTable extends Component {
     render() {
         var data = ImagesStore.getData();
         var filters = [];
-        filters.push(new SomeFilter());
+        filters.push(new ActiveFilter());
         return (<TableComponent store={ContainersStore} headers={headers} actions={ContainerTableRowAction}
                                 filters={filters}
                                 ac={ac}>
