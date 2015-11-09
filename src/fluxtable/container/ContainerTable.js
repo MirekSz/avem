@@ -4,6 +4,7 @@ import ContainersStore from './ContainersStore';
 import ImagesStore from '../image/ImagesStore';
 import ContainerTableRowAction from './ContainerTableRowAction';
 import {containersActionCreator as ac} from './ContainersActionCreator';
+import {BaseFilter} from '../table/Filters';
 
 
 var headers = [{name: 'Id', visible: false}, {name: 'Names'}, {
@@ -35,6 +36,25 @@ var headers = [{name: 'Id', visible: false}, {name: 'Names'}, {
     }
 }, {name: 'Image', visible: false}];
 
+
+class SomeFilter extends BaseFilter {
+    action() {
+        var state = this.state;
+        state.active = !state.active;
+        this.setState(this.getData());
+    }
+
+    getPresentation() {
+        var color = {color: ( this.state.active ? 'green' : 'red')};
+
+        return (<div>
+            <button type="button" onClick={this.yo} className="btn btn-primary" style={color}
+                    data-toggle="button"><span className="glyphicon glyphicon-ok"/>
+            </button>
+            &nbsp;Active
+        </div>);
+    }
+}
 export default class ContainerTable extends Component {
     constructor(props) {
         super(props);
@@ -43,11 +63,12 @@ export default class ContainerTable extends Component {
 
     render() {
         var data = ImagesStore.getData();
+        var filters = [];
+        filters.push(new SomeFilter());
         return (<TableComponent store={ContainersStore} headers={headers} actions={ContainerTableRowAction}
+                                filters={filters}
                                 ac={ac}>
             <div className="col-md-3">
-                <select className="form-control" ref="image" required="required">
-                </select>
             </div>
         </TableComponent>);
     }

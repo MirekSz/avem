@@ -42,11 +42,14 @@ export default class TableComponent extends Component {
     }
 
     render() {
+        var filters = this.props.filters.map((filter)=> <li><a href="#"
+                                                               onClick={filter.action.bind(this)}>{filter.getPresentation.bind(this)()}</a>
+        </li>);
+
         var rows = this.state.items.map((obj, index)=><TableRow headers={this.props.headers} row={obj}
                                                                 key={'row '+obj.Id} actions={this.props.actions}
                                                                 ac={this.props.ac}/>);
 
-        var clazz = "btn btn-primary " + ( this.state.active ? 'active' : '');
         var color = {color: ( this.state.active ? 'green' : 'red')};
 
         return (
@@ -58,14 +61,21 @@ export default class TableComponent extends Component {
                                 Servers
                             </h3>
                         </div>
-                        {this.props.children}
+                        <div className="col-md-3">
+                            <div className="btn-group  pull-right">
+                                <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    Action <span className="caret"></span>
+                                </button>
+                                <ul className="dropdown-menu">
+                                    {filters}
+                                </ul>
+                            </div>
+                        </div>
                         <div className="col-md-4">
                             <div className="input-group">
-                                <div className="input-group-btn">
-                                    <button onClick={this.showActive.bind(this)} type="button"
-                                            className={clazz} style={color}
-                                            data-toggle="button"><span className="glyphicon glyphicon-ok"/>
-                                    </button>
+                                <div className="input-group-addon">
+                                    <span className="glyphicon glyphicon-search"/>
                                 </div>
                                 <input type="text" aria-label="Text input with multiple buttons"
                                        onChange={this.search.bind(this)} ref="search" placeholder="Search..."
