@@ -2,11 +2,13 @@ var path = require('path');
 var express = require('express');
 var webpack = require('webpack');
 var config = require('./webpack.config.dev');
-var httpProxy = require('http-proxy');
-var proxy = httpProxy.createProxyServer();
 
 var app = express();
 var compiler = webpack(config);
+
+var httpProxy = require('http-proxy');
+var proxy = httpProxy.createProxyServer();
+
 
 function apiProxy(host, port) {
 
@@ -29,14 +31,12 @@ app.use(require('webpack-dev-middleware')(compiler, {
 }));
 
 app.use(require('webpack-hot-middleware')(compiler));
-
 app.get('/assets/:name', function (req, res) {
     res.sendFile(path.join(__dirname, req.originalUrl));
 });
 app.get('/assets/*/:name', function (req, res) {
     res.sendFile(path.join(__dirname, req.originalUrl));
 });
-
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
 });

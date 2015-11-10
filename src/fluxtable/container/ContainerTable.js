@@ -60,7 +60,6 @@ export default class ContainerTable extends Component {
 
 
     render() {
-        var data = ImagesStore.getData();
         var filters = [];
         filters.push(new ActiveFilter());
         return (<TableComponent store={ContainersStore} headers={headers} actions={ContainerTableRowAction}

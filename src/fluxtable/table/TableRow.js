@@ -11,10 +11,16 @@ export default class TableRow extends Component {
         this.setState({selected: !this.state.selected});
         var row = this.props.row;
         this.props.ac.selectContainer(row);
+        this.props.rowSelection(row.Id);
     }
 
     render() {
-        var style = {};
+        var style = {cursor: 'hand'};
+        var clazz = '';
+
+        if (this.props.row.Id == this.props.selected) {
+            clazz = 'active';
+        }
         var row = this.props.row;
 
         var component = "";
@@ -37,7 +43,7 @@ export default class TableRow extends Component {
         });
 
         return (
-            <tr style={style} onClick={this.select.bind(this)}>
+            <tr style={style} onClick={this.select.bind(this)} className={clazz}>
                 {cols}
                 {component}
             </tr>

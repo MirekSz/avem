@@ -4,6 +4,7 @@
 import Dispacher from './Dispacher';
 import * as ac from './../container/ContainersActionCreator'
 import React, { Component } from 'react/addons';
+import { render,unmountComponentAtNode } from 'react-dom';
 import ContainerForm from '../container/ContainerForm';
 import ImagesStore from '../image/ImagesStore';
 import ImageTableRowAction from '../image/ImageTableRowAction';
@@ -27,23 +28,23 @@ class StateManager {
 
 function addRouting() {
     $('#newContainer').click(function () {
-        React.unmountComponentAtNode(document.getElementById('root'));
+        unmountComponentAtNode(document.getElementById('root'));
 
-        React.render(<div><ContainerForm store={ImagesStore}/></div>, document.getElementById('root'));
+        render(<div><ContainerForm store={ImagesStore}/></div>, document.getElementById('root'));
     });
     $('a.selected').click(function () {
-        React.unmountComponentAtNode(document.getElementById('root'));
+        unmountComponentAtNode(document.getElementById('root'));
 
-        React.render(<div><App /></div>, document.getElementById('root'));
+        render(<div><App /></div>, document.getElementById('root'));
     });
     $('#home').click(function () {
-        React.unmountComponentAtNode(document.getElementById('root'));
+        unmountComponentAtNode(document.getElementById('root'));
 
-        React.render(<div><App /></div>, document.getElementById('root'));
+        render(<div><App /></div>, document.getElementById('root'));
     });
 
     $('#images').click(function () {
-        React.unmountComponentAtNode(document.getElementById('root'));
+        unmountComponentAtNode(document.getElementById('root'));
 
         var headers = [{name: 'RepoTags'}, {
             name: 'VirtualSize', formater: (value)=> {
@@ -57,7 +58,7 @@ function addRouting() {
         }];
 
 
-        React.render(<div><Table store={ImagesStore} headers={headers} actions={ImageTableRowAction}/>
+        render(<div><Table store={ImagesStore} headers={headers} actions={ImageTableRowAction}/>
         </div>, document.getElementById('root'));
 
     });

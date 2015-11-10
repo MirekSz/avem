@@ -68,7 +68,7 @@ class ContainerForm extends Component {
         }
         var options = this.state.data.map((image)=> {
             if (image.RepoTags[0].indexOf('<none>') == -1) {
-                return <option>{image.RepoTags[0]}</option>
+                return <option key={image.RepoTags[0]}>{image.RepoTags[0]}</option>
             }
         });
         return (

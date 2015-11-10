@@ -11,10 +11,15 @@ export default class TableComponent extends Component {
         super(props);
         this.state = this.getData();//{items: []};
         this.state.filters = {};
+        this.initFilters();
+    }
 
-        for (var i = 0; i < this.props.filters.length; i++) {
-            var obj = this.props.filters[i];
-            obj.init(this);
+    initFilters() {
+        if (this.props.filters) {
+            for (var i = 0; i < this.props.filters.length; i++) {
+                var obj = this.props.filters[i];
+                obj.init(this);
+            }
         }
     }
 
@@ -41,16 +46,19 @@ export default class TableComponent extends Component {
         this.setState(this.getData());
     }
 
-    render() {
-        var filters = this.props.filters.map((filter)=> <li key={filter}><a href="#"
-                                                                            onClick={filter.action.bind(filter)}>{filter.getPresentation()}</a>
-        </li>);
+    rowSelection(rowId) {
+        var state = this.state;
+        state.rowSelectionId = rowId;
+        this.setState(state);
+    }
 
-        var rows = this.state.items.map((obj, index)=><TableRow headers={this.props.headers} row={obj}
+    render() {
+        var filters = this.prepareFilters();
+        var rows = this.state.items.map((obj, index)=><TableRow selected={this.state.rowSelectionId}
+                                                                rowSelection={this.rowSelection.bind(this)}
+                                                                headers={this.props.headers} row={obj}
                                                                 key={'row '+obj.Id} actions={this.props.actions}
                                                                 ac={this.props.ac}/>);
-
-        var color = {color: ( this.state.active ? 'green' : 'red')};
 
         return (
             <div className="panel panel-default">
@@ -96,5 +104,17 @@ export default class TableComponent extends Component {
                 </div>
             </div>
         );
+    }
+
+    prepareFilters() {
+        if (!this.props.filters) {
+            return [];
+        }
+        var filters = this.props.filters.map((filter)=> {
+            return <li key={filter}>
+                <a href="#" onClick={filter.action.bind(filter)}>{filter.getPresentation()}</a>
+            </li>
+        });
+        return filters;
     }
 }

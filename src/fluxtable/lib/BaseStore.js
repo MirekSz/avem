@@ -24,7 +24,7 @@ export default class BaseStore {
         return this.data;
     }
 
-    getByCriteria(options) {
+    getByCriteria(options = {}) {
         var data = this.getData();
         if (options.query) {
             return data.filter((element)=>JSON.stringify(element).indexOf(options.query) != -1);
