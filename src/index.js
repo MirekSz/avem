@@ -7,4 +7,4 @@ import request from 'superagent';
 
 NProgress.configure({easing: 'ease', speed: 300});
 
-var app = render(<div><App /></div>, document.getElementById('root'));
+var app = render(<div><App/></div>, document.getElementById('root'));
