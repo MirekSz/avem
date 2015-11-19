@@ -21,6 +21,7 @@ export default class TableRow extends Component {
         if (this.props.row.Id == this.props.selected) {
             clazz = 'active';
         }
+
         var row = this.props.row;
 
         var component = "";

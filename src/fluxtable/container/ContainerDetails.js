@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {observe} from './../lib/Decorators';
 import request from 'superagent';
 import Dialogs from '../Dialogs';
+import ContainerDetailsWithoutDeps from './ContainerDetailsWithoutDeps';
 
 export default  @observe
 class ContainerDetails extends Component {
@@ -24,46 +25,7 @@ class ContainerDetails extends Component {
     }
 
     render() {
-        if (!this.state.selected) {
-            return null;
-        }
-        var version = getVersion(this.state.selected);
-        var appPorts = getPortsList(this.state.selected);
-        var dbPorts = getDbPorts(this.state.selected);
-
-        return (
-            <form>
-                <div className="form-group">
-                    <label >Version</label>
-                    <input type="text" className="form-control" id="version" value={version}
-                           readOnly/>
-                </div>
-                <div className="form-group">
-                    <label>Image</label>
-                    <input type="text" className="form-control" id="image" value={this.state.selected.Image}
-                           readOnly/>
-                </div>
-                <div className="form-group">
-                    <label>Ports</label>
-                    <ul>
-                        {appPorts}
-                    </ul>
-                </div>
-                <div className="form-group">
-                    <label >Labels</label>
-                    <ul>
-                        {dbPorts}
-                    </ul>
-                </div>
-                <div className="form-group">
-                    <label >Bash</label>
-                    <input type="text" className="form-control" id="ports"
-                           value={'docker exec -it "'+this.state.selected.Names[0].substring(1)+'" bash'} readOnly/>
-                </div>
-            </form>
-        );
-
-
+        return ( <ContainerDetailsWithoutDeps row={this.state.selected}/>);
     }
 }
 

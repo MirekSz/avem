@@ -61,7 +61,7 @@ def list=[];
 list.add(object.readLine())
 while(!object.readLine().isEmpty()  && counter < n_lines)
 {
-   list.add(object.readLine());
+   list.add(0,object.readLine());
     counter++;
 }
 def result='';
