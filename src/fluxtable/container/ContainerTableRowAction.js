@@ -59,7 +59,8 @@ int counter = 0;
 ReversedLinesFileReader object = new ReversedLinesFileReader(file);
 def list=[];
 list.add(object.readLine())
-while(!object.readLine().isEmpty()  && counter < n_lines)
+
+while(object.readLine()!=null && !object.readLine().isEmpty()  && counter < n_lines)
 {
    list.add(0,object.readLine());
     counter++;
@@ -73,7 +74,11 @@ return result;`;
         var url = `http://strumyk-next-build:${port[0].PublicPort}/executor/execute`;
         request.post(url).send({command: script}).end((err, res) => {
             if (!err) {
-                $('#jbossLogs').html(res.body.response);
+                var response = res.body.response;
+                response = response.replace('APPLICATION IS STARTED', '<span style="color:green;font-size: 18px"><b>APPLICATION IS STARTED</b></span>');
+                response = response.replace('APPLICATION STARTUP FAILED', '<span style="color:red;font-size: 18px"><b>APPLICATION IS STARTED</b></span>');
+                
+                $('#jbossLogs').html(response);
                 $('#myModal').modal();
 //                Dialogs.showInfo(res.body.response)
             }
@@ -95,7 +100,6 @@ return result;`;
                     className="glyphicon glyphicon-tags"></span></a>&nbsp;&nbsp;
                 <a href="#" title="Delete" onClick={this.removeContainer.bind(this)}><span
                     className="glyphicon glyphicon-trash"></span></a>
-
             </td>
         );
     }
