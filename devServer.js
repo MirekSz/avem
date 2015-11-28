@@ -14,7 +14,7 @@ function apiProxy(host, port) {
 
     return function (req, res, next) {
         if (req.url.match(new RegExp('^\/containers\/')) || req.url.match(new RegExp('^\/images\/')) || req.url.match(new RegExp('^\/commit'))) {
-            proxy.web(req, res, {target: 'http://strumyk-next-build:2375/'});
+            proxy.web(req, res, {target: 'http://strumyk-next-client-db:2375/'});
         } else {
             next();
         }

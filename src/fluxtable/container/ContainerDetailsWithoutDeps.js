@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styles from './ContainerDetailsWithoutDeps.less';
 
 export default class ContainerDetailsWithoutDeps extends Component {
 
@@ -16,7 +17,7 @@ export default class ContainerDetailsWithoutDeps extends Component {
         var dbPorts = getDbPorts(row);
 
         return (
-            <form>
+            <form className={styles.jupi}>
                 <div className="form-group">
                     <label >Version</label>
                     <input type="text" className="form-control" id="version" value={version}

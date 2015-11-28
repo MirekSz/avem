@@ -6,6 +6,11 @@ export class BaseFilter {
 
     init(component) {
         this.component = component;
+        this.initImpl();
+    }
+
+    initImpl() {
+
     }
 
     action() {
