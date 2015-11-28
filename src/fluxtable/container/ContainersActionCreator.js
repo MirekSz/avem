@@ -20,17 +20,17 @@ class ContainersActionCreator {
 
         if (publicPort) {
             var script = `
-                new URL('http://strumyk-next-build:${publicPort}/next-app/').getText();
                 Authenticator.setDefault (new Authenticator() {
                      protected PasswordAuthentication getPasswordAuthentication() {
                            return new PasswordAuthentication ("admin", "admin".toCharArray());
                      }
                 });
-                def data = new URL('http://strumyk-next-build:${publicPort}/next-instance/').getText()
+                new URL('http://strumyk-next-client-db:${publicPort}/next-app/').getText();
+                def data = new URL('http://strumyk-next-client-db:${publicPort}/next-instance/').getText()
                 def start = data.indexOf('Wersja ')
                 return data.substring(start+6,start+18).replace('<','')`;
 
-            request.post(`http://strumyk-next-build:${publicPort}/executor/execute`).send({command: script}).end((err, res) => {
+            request.post(`http://strumyk-next-client-db:${publicPort}/executor/execute`).send({command: script}).end((err, res) => {
                 if (!err) {
                     if (element.started) {
                         return;

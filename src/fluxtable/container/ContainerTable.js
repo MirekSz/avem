@@ -48,7 +48,6 @@ class ActiveFilter extends BaseFilter {
     }
 
     actionImpl(filters) {
-        debugger;
         filters.active = !filters.active;
     }
 
