@@ -59,9 +59,7 @@ class ContainersStore extends BaseStore {
         if (query) {
             return _sortByOrder(data.filter((element)=>element.Names[0].indexOf(query) != -1), ['Names'])
         }
-        return _sortByOrder(_filter(data, (row)=> {
-            return row.Names[0].indexOf('next') == -1;
-        }), ['Names']);
+        return _sortByOrder(data, ['Names']);
     }
 
     getSelected() {

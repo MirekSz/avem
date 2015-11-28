@@ -38,7 +38,17 @@ var headers = [{name: 'Id', visible: false}, {name: 'Names'}, {
 
 
 class ActiveFilter extends BaseFilter {
+    constructor(active) {
+        super();
+        this.active = active;
+    }
+
+    initImpl() {
+        this.component.state.filters.active = this.active;
+    }
+
     actionImpl(filters) {
+        debugger;
         filters.active = !filters.active;
     }
 
@@ -61,7 +71,7 @@ export default class ContainerTable extends Component {
 
     render() {
         var filters = [];
-        filters.push(new ActiveFilter());
+        filters.push(new ActiveFilter(true));
         return (<TableComponent store={ContainersStore} headers={headers} actions={ContainerTableRowAction}
                                 filters={filters}
                                 ac={ac}>
