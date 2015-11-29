@@ -6,6 +6,7 @@
 import Dispacher from './../lib/Dispacher';
 import Dialogs from './../Dialogs';
 import request from 'superagent';
+import _functions from 'lodash/object/functions';
 
 class ContainersActionCreator {
     checkAppState(element) {
@@ -66,7 +67,7 @@ class ContainersActionCreator {
         NProgress.start();
         var instance = Math.floor((Date.now() + '').substring(4));
 
-        var env = [`DOCKER_HTTP_PORT=${port}`, `DOCKER_APP_INSTANCE=${instance}`, `DOCKER_APP_VERTION=${ver}`, 'DOCKER_HTTP_ADDR=strumyk-next-build', `DOCKER_DB_HOST=${db.dbHost}`, `DOCKER_DB_PORT=${db.dbPort}`, `DOCKER_DB_NAME=${db.dbName}`, `DOCKER_DB_USER=${db.dbUser}`, `DOCKER_DB_PASSWORD=${db.dbPassword}`, `DOCKER_DB_MAPPING=${db.dbMapping}`];
+        var env = [`DOCKER_HTTP_PORT=${port}`, `DOCKER_APP_INSTANCE=${instance}`, `DOCKER_APP_VERTION=${ver}`, 'DOCKER_HTTP_ADDR=strumyk-next-client-db', `DOCKER_DB_HOST=${db.dbHost}`, `DOCKER_DB_PORT=${db.dbPort}`, `DOCKER_DB_NAME=${db.dbName}`, `DOCKER_DB_USER=${db.dbUser}`, `DOCKER_DB_PASSWORD=${db.dbPassword}`, `DOCKER_DB_MAPPING=${db.dbMapping}`];
         var data = {
             Tty: true,
             RestartPolicy: {
@@ -162,6 +163,24 @@ class ContainersActionCreator {
             });
     }
 }
+
+function apply(name) {
+    return this.target[name].apply(this.target, Array.prototype.slice.call(arguments, 1));
+}
+class Proxy {
+    constructor(target, args) {
+        this.target = target;
+        var objs = Object.getOwnPropertyNames(target.__proto__);
+        for (var i in objs) {
+            var name = objs[i];
+//            target[name + 'Orginal'] = target[name];
+            this[name] = apply.bind(this, name);
+        }
+    }
+}
+
+
+//var proxy = new Proxy(new ContainersActionCreator());
 
 export var containersActionCreator = new ContainersActionCreator();
 
