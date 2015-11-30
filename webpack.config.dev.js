@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    devtool: 'eval',
+    devtool: 'source-map',
     entry: [
         'webpack-hot-middleware/client',
         './src/index'
@@ -14,7 +14,10 @@ module.exports = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+        new webpack.DefinePlugin({
+            DOCKER_API: JSON.stringify('strumyk-next-client-db')
+        })
     ],
     module: {
         loaders: [{

@@ -19,7 +19,8 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': JSON.stringify('production')
-            }
+            },
+            DOCKER_API: JSON.stringify('strumyk-next-client-db')
         }),
         new webpack.optimize.UglifyJsPlugin({
             compressor: {

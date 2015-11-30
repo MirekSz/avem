@@ -82,20 +82,19 @@ class ContainerForm extends Component {
                 <div className=" panel-body">
                     <form onSubmit={this.create.bind(this)}>
                         <div className="form-group">
-                            <label for="ports">Name</label>
+                            <label htmlFor="ports">Name</label>
                             <input type="text" className="form-control" ref="name" required="required"/>
                         </div>
 
                         <div className="form-group">
-                            <label for="image">Image</label>
+                            <label htmlFor="image">Image</label>
                             <select className="form-control" ref="image" required="required">
                                 {options}
                             </select>
                         </div>
                         <div className="form-group">
-                            <label for="ver">Version</label>
-                            <input type="text" className="form-control" ref="ver"
-                                   placeholder="147.91"/>
+                            <label htmlFor="ver">Version</label>
+                            <input type="text" className="form-control" ref="ver"/>
                         </div>
                         <div className="row">
                             <div className="form-group col-xs-2">
@@ -138,8 +137,8 @@ class ContainerForm extends Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label for="port">Port</label>
-                            <input type="text" readonly disabled className="form-control" ref="port"
+                            <label htmlFor="port">Port</label>
+                            <input type="text" readOnly disabled className="form-control" ref="port"
                                    value={this.state.port}/>
                         </div>
                         <button type="submit" className="btn btn-default">Zapisz

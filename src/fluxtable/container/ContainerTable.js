@@ -70,7 +70,7 @@ export default class ContainerTable extends Component {
 
     render() {
         var filters = [];
-        filters.push(new ActiveFilter(true));
+        filters.push(new ActiveFilter(false));
         return (<TableComponent store={ContainersStore} headers={headers} actions={ContainerTableRowAction}
                                 filters={filters}
                                 ac={ac}>

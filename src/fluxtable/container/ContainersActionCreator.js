@@ -26,12 +26,12 @@ class ContainersActionCreator {
                            return new PasswordAuthentication ("admin", "admin".toCharArray());
                      }
                 });
-                new URL('http://strumyk-next-client-db:${publicPort}/next-app/').getText();
-                def data = new URL('http://strumyk-next-client-db:${publicPort}/next-instance/').getText()
+                new URL('http://${DOCKER_API}:${publicPort}/next-app/').getText();
+                def data = new URL('http://${DOCKER_API}:${publicPort}/next-instance/').getText()
                 def start = data.indexOf('Wersja ')
                 return data.substring(start+6,start+18).replace('<','')`;
 
-            request.post(`http://strumyk-next-client-db:${publicPort}/executor/execute`).send({command: script}).end((err, res) => {
+            request.post(`http://${DOCKER_API}:${publicPort}/executor/execute`).send({command: script}).end((err, res) => {
                 if (!err) {
                     if (element.started) {
                         return;
@@ -67,7 +67,7 @@ class ContainersActionCreator {
         NProgress.start();
         var instance = Math.floor((Date.now() + '').substring(4));
 
-        var env = [`DOCKER_HTTP_PORT=${port}`, `DOCKER_APP_INSTANCE=${instance}`, `DOCKER_APP_VERTION=${ver}`, 'DOCKER_HTTP_ADDR=strumyk-next-client-db', `DOCKER_DB_HOST=${db.dbHost}`, `DOCKER_DB_PORT=${db.dbPort}`, `DOCKER_DB_NAME=${db.dbName}`, `DOCKER_DB_USER=${db.dbUser}`, `DOCKER_DB_PASSWORD=${db.dbPassword}`, `DOCKER_DB_MAPPING=${db.dbMapping}`];
+        var env = [`DOCKER_HTTP_PORT=${port}`, `DOCKER_APP_INSTANCE=${instance}`, `DOCKER_APP_VERTION=${ver}`, `DOCKER_HTTP_ADDR=${DOCKER_API}`, `DOCKER_DB_HOST=${db.dbHost}`, `DOCKER_DB_PORT=${db.dbPort}`, `DOCKER_DB_NAME=${db.dbName}`, `DOCKER_DB_USER=${db.dbUser}`, `DOCKER_DB_PASSWORD=${db.dbPassword}`, `DOCKER_DB_MAPPING=${db.dbMapping}`];
         var data = {
             Tty: true,
             RestartPolicy: {
@@ -139,10 +139,14 @@ class ContainersActionCreator {
     }
 
     removeContainer(id) {
-        var execute = request.del(`/containers/${id}`);
+        var stopRequest = request.post(`/containers/${id}/stop`);
 
-        this.addCallback(execute, (err, res) => {
-            Dispacher.dispach(new DeleteContainer(id));
+
+        this.addCallback(stopRequest, (err, res) => {
+            var deleteRequest = request.del(`/containers/${id}`);
+            this.addCallback(deleteRequest, (err, res) => {
+                Dispacher.dispach(new DeleteContainer(id));
+            });
         });
     }
 
@@ -180,9 +184,9 @@ class Proxy {
 }
 
 
-//var proxy = new Proxy(new ContainersActionCreator());
+var proxy = new Proxy(new ContainersActionCreator());
 
-export var containersActionCreator = new ContainersActionCreator();
+export var containersActionCreator = proxy;
 
 
 export class LoadAllContainers {

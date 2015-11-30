@@ -10,12 +10,12 @@ export default class TableHeader extends Component {
     render() {
         var headersElements = this.props.headers.map((column)=> {
             if (column.visible == undefined || column.visible) {
-                return <td key={column.name}>{column.name}</td>
+                return <th key={column.name}>{column.name}</th>
             }
         });
         var actions = '';
         if (this.props.actions) {
-            actions = <td key="action" className="col-xs-3">Actions</td>;
+            actions = <th key="action" className="col-xs-3">Actions</th>;
         }
 
         return (

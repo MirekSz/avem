@@ -12,7 +12,7 @@ export default class ContainerTableRowAction extends Component {
     open() {
         var id = this.props.row.Id;
         var port = this.props.row.Ports.filter((element)=>element.PrivatePort == 80);
-        var url = `http://strumyk-next-client-db:${port[0].PublicPort}/next-instance`;
+        var url = `http://${DOCKER_API}:${port[0].PublicPort}/next-instance`;
         var win = window.open(url, '_blank');
         win.focus();
     }
@@ -71,7 +71,7 @@ result+= line+"<br/>"
 }
 return result;`;
 
-        var url = `http://strumyk-next-client-db:${port[0].PublicPort}/executor/execute`;
+        var url = `http://${DOCKER_API}:${port[0].PublicPort}/executor/execute`;
         request.post(url).send({command: script}).end((err, res) => {
             if (!err) {
                 var response = res.body.response;
