@@ -7,6 +7,7 @@ import ContainerDetails from './fluxtable/container/ContainerDetails';
 import ContainerTable from './fluxtable/container/ContainerTable';
 import StateManager from './fluxtable/lib/StateManager'
 import SoundNotifier from './fluxtable/SoundNotifier';
+import NewServerActionStateManager from './fluxtable/NewServerActionStateManager';
 
 StateManager.start();
 
@@ -29,6 +30,7 @@ export default class App extends Component {
         return (
             <div className="row">
                 <SoundNotifier supports={supports} extraFeature={titleMod}/>
+                <NewServerActionStateManager store={ContainersStore}/>
                 <div className="col-md-8">
                     <ContainerTable />
                 </div>
