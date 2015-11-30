@@ -15,9 +15,12 @@ class ImagesStore extends BaseStore {
     dispacherListener(action) {
         switch (action.constructor) {
             case LoadAllContainers:
-                var data = _sortByOrder(action.data, ['RepoTags']).filter((element)=> {
-                    return element.RepoTags[0].indexOf('next') == -1
-                });
+                var data = _sortByOrder(action.data, ['RepoTags']);
+                if (PROD) {
+                    data = data.filter((element)=> {
+                        return element.RepoTags[0].indexOf('next') == -1
+                    });
+                }
                 this.setData(data);
                 break;
             case CreateImage:

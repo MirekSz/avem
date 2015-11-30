@@ -8,6 +8,7 @@ export default class ContainerDetailsWithoutDeps extends Component {
     }
 
     render() {
+        debugger;
         var row = this.props.row;
         if (!row) {
             return null;

@@ -20,6 +20,7 @@ module.exports = {
             'process.env': {
                 'NODE_ENV': JSON.stringify('production')
             },
+            PROD: true,
             DOCKER_API: JSON.stringify('strumyk-next-client-db')
         }),
         new webpack.optimize.UglifyJsPlugin({

@@ -16,6 +16,7 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
+            PROD: false,
             DOCKER_API: JSON.stringify('strumyk-next-client-db')
         })
     ],

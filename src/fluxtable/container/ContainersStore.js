@@ -57,7 +57,8 @@ class ContainersStore extends BaseStore {
 
     getByCriteria({filters, query}={}) {
         var data = filters && filters.active && !query ? this.getActiveElements() : this.getData();
-        if (!query) {
+
+        if (PROD) {
             data = data.filter((element)=> {
                 return !_startsWith(element.Names[0], '/n1');
             });
