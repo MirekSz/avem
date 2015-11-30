@@ -18,7 +18,7 @@ var SoundNotifier = React.createClass({
     storeChanged(action){
         if (this.props.supports(action)) {
             var audio = new Audio('assets/NFF-choice-good.wav');
-//            audio.play();
+            audio.play();
             if (this.props.extraFeature) {
                 this.props.extraFeature(action);
             }
