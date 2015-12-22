@@ -29,7 +29,7 @@ function sayName(target) {
 @sayName
 class SomeClass {
     constructor() {
-        this.name = 'mirek'
+        this.name = 'mirek';
         initDecorators(this);
     }
 }

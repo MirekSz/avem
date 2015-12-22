@@ -59,18 +59,6 @@ portInfo.set(5432, 'Database');
 portInfo.set(8000, 'DEBUG');
 portInfo.set(9990, 'Admin Console');
 
-function getPortsList(selected) {
-    var ports = selected.Ports.map((obj)=> {
-        return <li key={obj.PrivatePort}>{portInfo.get(obj.PrivatePort) + ' = ' + obj.PublicPort}</li>
-    });
-
-    if (ports.length == 0) {
-        var labels = selected.Labels;
-        ports = <li>{labels.PrivateHostPort + ' -> ' + labels.HostPort}</li>;
-    }
-    return ports;
-}
-
 function getVersion(selected) {
     var labels = selected.Labels;
     for (var obj  in  labels) {
@@ -84,6 +72,19 @@ function getVersion(selected) {
     }
     return 'LAST';
 }
+
+function getPortsList(selected) {
+    var ports = selected.Ports.map((obj)=> {
+        return <li key={obj.PrivatePort}>{portInfo.get(obj.PrivatePort) + ' = ' + obj.PublicPort}</li>
+    });
+
+    if (ports.length == 0) {
+        var labels = selected.Labels;
+        ports = <li>{labels.PrivateHostPort + ' -> ' + labels.HostPort}</li>;
+    }
+    return ports;
+}
+
 
 function getDbPorts(selected) {
     var ports = [];
