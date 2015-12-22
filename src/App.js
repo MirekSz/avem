@@ -20,7 +20,7 @@ function supports(action) {
     return newVar;
 }
 
-var ProfilePage = connectToStores(ContainerDetailsWithoutDeps, ContainersStore, props => ({
+var DecoratedDetailsPage = connectToStores(ContainerDetailsWithoutDeps, ContainersStore, props => ({
     row: props.store.getSelected()
 }));
 
@@ -40,17 +40,17 @@ export default class App extends Component {
                     <ContainerTable />
                 </div>
                 <div className="col-md-4">
-                    <div className="panel panel-default">
+                    <div className="panel panel-default col-md-6">
                         <div className="panel-heading">
                             <h3 className="panel-title">
                                 Details
                             </h3>
                         </div>
                         <div className=" panel-body">
-                            <ProfilePage store={ContainersStore}/>
+                            <DecoratedDetailsPage store={ContainersStore}/>
                         </div>
                     </div>
-                    <div className="panel panel-default">
+                    <div className="panel panel-default col-md-6">
                         <div className="panel-heading">
                             <h3 className="panel-title">
                                 Details
@@ -85,8 +85,6 @@ function connectToStores(Component, store, getStateFromStores) {
         },
 
         render() {
-            debugger;
-
             var props = this.props;
             var state = this.state;
             return <Component {...props} {...state} />;

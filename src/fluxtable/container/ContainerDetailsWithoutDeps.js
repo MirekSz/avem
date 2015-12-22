@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react/addons';
+
 import styles from './ContainerDetailsWithoutDeps.less';
 
 export default class ContainerDetailsWithoutDeps extends Component {
@@ -8,7 +9,6 @@ export default class ContainerDetailsWithoutDeps extends Component {
     }
 
     render() {
-        debugger;
         var row = this.props.row;
         if (!row) {
             return null;

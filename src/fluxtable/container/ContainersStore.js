@@ -77,6 +77,9 @@ class ContainersStore extends BaseStore {
         ac.containersActionCreator.loadAll();
         setInterval(stateLocator.bind(this), 60000);
         setTimeout(stateLocator.bind(this), 5000);
+        setInterval(function () {
+            ac.containersActionCreator.loadAll();
+        }, 100000);
     }
 
 }
