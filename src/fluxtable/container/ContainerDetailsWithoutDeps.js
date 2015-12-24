@@ -75,7 +75,12 @@ function getVersion(selected) {
 
 function getPortsList(selected) {
     var ports = selected.Ports.map((obj)=> {
-        return <li key={obj.PrivatePort}>{portInfo.get(obj.PrivatePort) + ' = ' + obj.PublicPort}</li>
+        var readablePortName = portInfo.get(obj.PrivatePort);
+
+        if (!readablePortName) {
+            readablePortName = obj.PrivatePort;
+        }
+        return <li key={obj.PrivatePort}>{readablePortName + ' = ' + obj.PublicPort}</li>
     });
 
     if (ports.length == 0) {
