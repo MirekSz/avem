@@ -1,9 +1,11 @@
 import React from 'react';
-import { render } from 'react-dom';
+import {render} from 'react-dom';
 import App from './App';
+export Customer from './Customer';
 import PortService from './fluxtable/PortService';
 import request from 'superagent';
-
+import lodash from 'lodash';
+//asdsx2
 function initDecorators(target, options) {
     var constructor = target.constructor;
     var ownPropertyNames = Object.getOwnPropertyNames(constructor.prototype);
@@ -39,3 +41,8 @@ new SomeClass().sayMyName();
 NProgress.configure({easing: 'ease', speed: 300});
 
 var app = render(<div><App/></div>, document.getElementById('root'));
+
+export function hello() {
+    console.log("jQuery version " + $.fn.jquery);
+    console.log("jQuery-UI version " + $.ui.version);
+};

@@ -44,7 +44,9 @@ class ActiveFilter extends BaseFilter {
     }
 
     initImpl() {
-        this.component.state.filters.active = this.active;
+        if (this.component) {
+            this.component.state.filters.active = this.active;
+        }
     }
 
     actionImpl(filters) {

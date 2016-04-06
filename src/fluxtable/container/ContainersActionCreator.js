@@ -69,6 +69,7 @@ class ContainersActionCreator {
 
         var env = [`DOCKER_HTTP_PORT=${port}`, `DOCKER_APP_INSTANCE=${instance}`, `DOCKER_APP_VERTION=${ver}`, `DOCKER_HTTP_ADDR=${DOCKER_API}`, `DOCKER_DB_HOST=${db.dbHost}`, `DOCKER_DB_PORT=${db.dbPort}`, `DOCKER_DB_NAME=${db.dbName}`, `DOCKER_DB_USER=${db.dbUser}`, `DOCKER_DB_PASSWORD=${db.dbPassword}`, `DOCKER_DB_MAPPING=${db.dbMapping}`];
         var data = {
+            Hostname: name,
             Tty: true,
             RestartPolicy: {
                 "MaximumRetryCount": 0,

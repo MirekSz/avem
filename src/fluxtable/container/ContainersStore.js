@@ -58,14 +58,16 @@ class ContainersStore extends BaseStore {
     getByCriteria({filters, query}={}) {
         var data = filters && filters.active && !query ? this.getActiveElements() : this.getData();
 
+        if (query) {
+            return _sortByOrder(data.filter((element)=>element.Names[0].indexOf(query) != -1), ['Names'])
+        }
+        
         if (PROD) {
             data = data.filter((element)=> {
                 return !_startsWith(element.Names[0], '/n1');
             });
         }
-        if (query) {
-            return _sortByOrder(data.filter((element)=>element.Names[0].indexOf(query) != -1), ['Names'])
-        }
+
         return _sortByOrder(data, ['Names']);
     }
 

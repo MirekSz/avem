@@ -14,15 +14,19 @@ export class BaseFilter {
     }
 
     action() {
-        this.actionImpl(this.component.state.filters);
-        this.component.setState(this.component.getData());
+        if (this.component) {
+            this.actionImpl(this.component.state.filters);
+            this.component.setState(this.component.getData());
+        }
     }
 
     actionImpl() {
     }
 
     getPresentation() {
-        return this.getPresentationImpl(this.component.state.filters);
+        if (this.component) {
+            return this.getPresentationImpl(this.component.state.filters);
+        }
     }
 
     getPresentationImpl(filters) {

@@ -11,7 +11,9 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'dist'),
         filename: '[hash].bundle.js',
-        publicPath: '/static/'
+        publicPath: '/static/',
+        libraryTarget: "var",
+        library: "Foo"
     },
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(true),
