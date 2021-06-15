@@ -49,7 +49,7 @@ class ContainersActionCreator {
 
     createImage(id, repo, tag) {
         NProgress.start();
-        request.post(`/commit?container=${id}&comment=commit&repo=${repo}&tag=${tag}`).set('Accept', 'application/json').then((err, res)=> {
+        request.post(`/commit?container=${id}&comment=commit&repo=${repo}&tag=${tag}`).set('Accept', 'application/json').then((err, res) => {
             if (err.status == 201) {
                 Dispacher.dispach(new CreateImage());
                 NProgress.done();
@@ -82,6 +82,13 @@ class ContainersActionCreator {
             "Labels": {PrivateHostPort: "80", HostPort: port},
             "Volumes": {
                 "/usr/local/jboss/jboss-as-7.1/standalone/log": {}
+            }, "HostConfig": {
+                "PortBindings": {
+                    "80/tcp": [{"HostPort": port}],
+                    "9990/tcp": [{"HostPort": (Number(port) + 2) + ''}],
+                    "8000/tcp": [{"HostPort": (Number(port) + 4 + '')}],
+                    "5432/tcp": [{"HostPort": (Number(port) + 6 + '')}]
+                }
             }
         };
 
@@ -91,20 +98,12 @@ class ContainersActionCreator {
             data.Labels[arr[0]] = arr[1];
         }
 
-        var run = {
-            "PortBindings": {
-                "80/tcp": [{"HostPort": port}],
-                "9990/tcp": [{"HostPort": (Number(port) + 2) + ''}],
-                "8000/tcp": [{"HostPort": (Number(port) + 4 + '')}],
-                "5432/tcp": [{"HostPort": (Number(port) + 6 + '')}]
-            }
-        };
-        request.post(`/containers/create?name=${name}`).set('Accept', 'application/json').send(data).end((err, res)=> {
+        request.post(`/containers/create?name=${name}`).set('Accept', 'application/json').send(data).end((err, res) => {
             if (err) {
                 Dialogs.showError(err.response.statusText, err.response.text);
             } else {
                 var id = res.body.Id;
-                request.post(`/containers/${id}/start`).set('Accept', 'application/json').send(run).end((err, res)=> {
+                request.post(`/containers/${id}/start`).set('Accept', 'application/json').end((err, res) => {
                     if (err) {
                         Dialogs.showError(err.response.statusText, err.response.text);
                     }
@@ -172,6 +171,7 @@ class ContainersActionCreator {
 function apply(name) {
     return this.target[name].apply(this.target, Array.prototype.slice.call(arguments, 1));
 }
+
 class Proxy {
     constructor(target, args) {
         this.target = target;
@@ -222,6 +222,7 @@ export class SelectContainer {
 
 export class CreateContainer {
 }
+
 export class CreateImage {
 }
 

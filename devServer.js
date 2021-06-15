@@ -20,6 +20,7 @@ function apiProxy(host, port) {
         }
     }
 }
+
 app.use(apiProxy('localhost', 3000));
 app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
