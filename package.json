@@ -46,7 +46,7 @@
   "dependencies": {
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
-    "superagent": "^1.4.0",
+    "superagent": "^8.0.8",
     "lodash": "^3.10.1"
   }
 }
